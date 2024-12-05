@@ -22,7 +22,9 @@
   background-color: #1c1c1c;
 }
 
-form input:not(.display) {
+.numbers,
+.deleting,
+.operator {
   border: none;
   outline: 0;
   width: 60px;
@@ -34,7 +36,11 @@ form input:not(.display) {
   cursor: pointer;
 }
 
-form input:hover:not(.display) {
+.operator {
+  font-weight: 700;
+}
+
+.numbers:hover {
   background-color: #797979;
 }
 
@@ -59,13 +65,18 @@ form input:hover:not(.display) {
 }
 
 .display {
-  height: 50px;
-  background-color: white;
+  height: 55px;
+  background-color: rgb(54, 50, 50);
   width: 100%;
   display: flex;
   text-align: right;
   flex: 1;
   margin: 5px 0px 15px 0px;
-
+  outline: none;
+  border-radius: 5px;
   font-size: 20;
+  color: white;
+  font-size: 20px;
+  letter-spacing: 2.5px;
+  padding-right: 5px;
 }
