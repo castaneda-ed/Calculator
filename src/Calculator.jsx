@@ -2,17 +2,95 @@ import { useState } from "react";
 
 export default function Calculator() {
   const [value, setValue] = useState("");
+
+  const handleKey = (e) => {
+    if (
+      !/[\d\+\-\*\/\.\%\(\)]/.test(e.key) &&
+      e.key !== "Backspace" &&
+      e.key !== "Enter" &&
+      e.key !== "Escape"
+    ) {
+      e.preventDefault();
+      return;
+    } else if (value === "" && ["+", "-", "*", "/", ".", "%"].includes(e.key)) {
+      e.preventDefault();
+      return;
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      calculateResult();
+    } else if (["+", "-", "*", "/", "%", "."].includes(e.key)) {
+      e.preventDefault();
+      if (!value.endsWith(e.key)) {
+        setValue((prev) => prev + e.key);
+      }
+    } else if (e.key === "Backspace") {
+      e.preventDefault();
+      setValue((prev) => prev.slice(0, -1));
+    } else if (e.key === "Escape") {
+      setValue("");
+    } else if (e.key === "." && !value.includes(".")) {
+      setValue((prev) => prev + e.key);
+    }
+  };
+
+  // Check if the operator is valid (not consecutive)
+  const isValidOperator = (operator) => {
+    const lastChar = value.slice(-1);
+    if (["+", "-", "*", "/", "%"].includes(lastChar)) {
+      return false;
+    }
+    return true;
+  };
+
+  // Helper function to check if it's valid to add a decimal point
+  const isValidDecimal = () => {
+    const lastSegment = value.split(/[\+\-\*\/\%]/).pop();
+    const hasDecimalAlready = lastSegment && lastSegment.includes(".");
+
+    return !hasDecimalAlready;
+  };
+
+  const calculateResult = () => {
+    try {
+      setValue(eval(value).toString());
+    } catch (error) {
+      setValue("Error");
+    }
+  };
+
+  const handleCalculatorClick = (e) => {
+    const input = e.target.value;
+
+    if (["+", "-", "*", "/", "%"].includes(input)) {
+      if (value === "" || !isValidOperator(input)) {
+        return;
+      }
+    }
+
+    if (input === "." && !isValidDecimal()) {
+      return;
+    }
+
+    setValue((prev) => prev + input);
+  };
+
   return (
     <main className="container ">
       <div className="calculator">
-        <form>
+        <form onSubmit={(e) => e.preventDefault()}>
           <label>
-            <input type="text" className="display" value={value} />
+            <input
+              type="text"
+              className="display"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={handleKey}
+            />
           </label>
           <div>
             <input
               type="button"
-              value="AC"
+              value="CA"
               className="deleting"
               onClick={(e) => setValue("")}
             />
@@ -26,91 +104,64 @@ export default function Calculator() {
               type="button"
               value="%"
               className="deleting"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
             <input
               type="button"
               value="/"
               className="operator"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
           </div>
           <div>
-            <input
-              type="button"
-              value="7"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
-            <input
-              type="button"
-              value="8"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
-            <input
-              type="button"
-              value="9"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
+            {["7", "8", "9"].map((num) => (
+              <input
+                key={num}
+                type="button"
+                value={num}
+                className="numbers"
+                onClick={handleCalculatorClick}
+              />
+            ))}
             <input
               type="button"
               value="*"
               className="operator"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
           </div>
           <div>
-            <input
-              type="button"
-              value="4"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
-            <input
-              type="button"
-              value="5"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
-            <input
-              type="button"
-              value="6"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
+            {["4", "5", "6"].map((num) => (
+              <input
+                key={num}
+                type="button"
+                value={num}
+                className="numbers"
+                onClick={handleCalculatorClick}
+              />
+            ))}
             <input
               type="button"
               value="-"
               className="operator"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
           </div>
           <div>
-            <input
-              type="button"
-              value="1"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
-            <input
-              type="button"
-              value="2"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
-            <input
-              type="button"
-              value="3"
-              className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
-            />
+            {["1", "2", "3"].map((num) => (
+              <input
+                key={num}
+                type="button"
+                value={num}
+                className="numbers"
+                onClick={handleCalculatorClick}
+              />
+            ))}
             <input
               type="button"
               value="+"
               className="operator"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
           </div>
           <div className="last-row">
@@ -118,26 +169,26 @@ export default function Calculator() {
               type="button"
               value="00"
               className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
             <input
               type="button"
               value="0"
               className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
             <input
               type="button"
               value="."
               style={{ fontSize: "19px" }}
               className="numbers"
-              onClick={(e) => setValue(value + e.target.value)}
+              onClick={handleCalculatorClick}
             />
             <input
               type="button"
               value="="
               className="operator"
-              onClick={(e) => setValue(eval(value))}
+              onClick={calculateResult}
             />
           </div>
         </form>
