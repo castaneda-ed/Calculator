@@ -137,134 +137,137 @@ export default function Calculator() {
   };
 
   return (
-    <main className="container ">
-      <div className="calculator">
-        <form onSubmit={(e) => e.preventDefault()}>
-          <label>
-            <input
-              type="text"
-              className="display"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyDown={handleKey}
-            />
-          </label>
-          <div className="intermediate-display">
-            <p>{intermediateResult || "..."}</p>
-          </div>
-          <div className="calculator-buttons">
-            <input
-              type="button"
-              value="CA"
-              className="deleting"
-              onClick={(e) => {
-                setValue("");
-                setIntermediateResult("");
-              }}
-            />
-            <input
-              type="button"
-              value="DE"
-              className="deleting"
-              onClick={(e) => {
-                const updatedValue = value.slice(0, -1);
-                setValue(updatedValue);
-                calculateIntermediateResult(updatedValue);
-              }}
-            />
-            <input
-              type="button"
-              value="%"
-              className="deleting"
-              onClick={handleCalculatorClick}
-            />
-            <input
-              type="button"
-              value="/"
-              className="operator"
-              onClick={handleCalculatorClick}
-            />
-          </div>
-          <div>
-            {["7", "8", "9"].map((num) => (
+    <>
+      <h1>Simple Calculator</h1>
+      <main className="container ">
+        <div className="calculator">
+          <form onSubmit={(e) => e.preventDefault()}>
+            <label>
               <input
-                key={num}
+                type="text"
+                className="display"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onKeyDown={handleKey}
+              />
+            </label>
+            <div className="intermediate-display">
+              <p>{intermediateResult || "..."}</p>
+            </div>
+            <div className="calculator-buttons">
+              <input
                 type="button"
-                value={num}
+                value="CA"
+                className="deleting"
+                onClick={(e) => {
+                  setValue("");
+                  setIntermediateResult("");
+                }}
+              />
+              <input
+                type="button"
+                value="DE"
+                className="deleting"
+                onClick={(e) => {
+                  const updatedValue = value.slice(0, -1);
+                  setValue(updatedValue);
+                  calculateIntermediateResult(updatedValue);
+                }}
+              />
+              <input
+                type="button"
+                value="%"
+                className="deleting"
+                onClick={handleCalculatorClick}
+              />
+              <input
+                type="button"
+                value="/"
+                className="operator"
+                onClick={handleCalculatorClick}
+              />
+            </div>
+            <div>
+              {["7", "8", "9"].map((num) => (
+                <input
+                  key={num}
+                  type="button"
+                  value={num}
+                  className="numbers"
+                  onClick={handleCalculatorClick}
+                />
+              ))}
+              <input
+                type="button"
+                value="*"
+                className="operator"
+                onClick={handleCalculatorClick}
+              />
+            </div>
+            <div>
+              {["4", "5", "6"].map((num) => (
+                <input
+                  key={num}
+                  type="button"
+                  value={num}
+                  className="numbers"
+                  onClick={handleCalculatorClick}
+                />
+              ))}
+              <input
+                type="button"
+                value="-"
+                className="operator"
+                onClick={handleCalculatorClick}
+              />
+            </div>
+            <div>
+              {["1", "2", "3"].map((num) => (
+                <input
+                  key={num}
+                  type="button"
+                  value={num}
+                  className="numbers"
+                  onClick={handleCalculatorClick}
+                />
+              ))}
+              <input
+                type="button"
+                value="+"
+                className="operator"
+                onClick={handleCalculatorClick}
+              />
+            </div>
+            <div className="last-row">
+              <input
+                type="button"
+                value="00"
                 className="numbers"
                 onClick={handleCalculatorClick}
               />
-            ))}
-            <input
-              type="button"
-              value="*"
-              className="operator"
-              onClick={handleCalculatorClick}
-            />
-          </div>
-          <div>
-            {["4", "5", "6"].map((num) => (
               <input
-                key={num}
                 type="button"
-                value={num}
+                value="0"
                 className="numbers"
                 onClick={handleCalculatorClick}
               />
-            ))}
-            <input
-              type="button"
-              value="-"
-              className="operator"
-              onClick={handleCalculatorClick}
-            />
-          </div>
-          <div>
-            {["1", "2", "3"].map((num) => (
               <input
-                key={num}
                 type="button"
-                value={num}
+                value="."
+                style={{ fontSize: "19px" }}
                 className="numbers"
                 onClick={handleCalculatorClick}
               />
-            ))}
-            <input
-              type="button"
-              value="+"
-              className="operator"
-              onClick={handleCalculatorClick}
-            />
-          </div>
-          <div className="last-row">
-            <input
-              type="button"
-              value="00"
-              className="numbers"
-              onClick={handleCalculatorClick}
-            />
-            <input
-              type="button"
-              value="0"
-              className="numbers"
-              onClick={handleCalculatorClick}
-            />
-            <input
-              type="button"
-              value="."
-              style={{ fontSize: "19px" }}
-              className="numbers"
-              onClick={handleCalculatorClick}
-            />
-            <input
-              type="button"
-              value="="
-              className="operator"
-              onClick={calculateResult}
-            />
-          </div>
-        </form>
-      </div>
-    </main>
+              <input
+                type="button"
+                value="="
+                className="operator"
+                onClick={calculateResult}
+              />
+            </div>
+          </form>
+        </div>
+      </main>
+    </>
   );
 }
