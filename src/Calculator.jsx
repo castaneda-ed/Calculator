@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { evaluate } from "mathjs";
 
 export default function Calculator() {
   const [value, setValue] = useState("");
@@ -11,6 +12,12 @@ export default function Calculator() {
       e.key !== "Escape"
     ) {
       e.preventDefault();
+      return;
+    } else if (
+      (value === "" ||
+        ["+", "-", "*", "/", ".", "%"].includes(value.slice(-1))) &&
+      e.key === "Enter"
+    ) {
       return;
     } else if (value === "" && ["+", "-", "*", "/", ".", "%"].includes(e.key)) {
       e.preventDefault();
@@ -50,14 +57,6 @@ export default function Calculator() {
     return !hasDecimalAlready;
   };
 
-  const calculateResult = () => {
-    try {
-      setValue(eval(value).toString());
-    } catch (error) {
-      setValue("Error");
-    }
-  };
-
   const handleCalculatorClick = (e) => {
     const input = e.target.value;
 
@@ -72,6 +71,15 @@ export default function Calculator() {
     }
 
     setValue((prev) => prev + input);
+  };
+
+  const calculateResult = () => {
+    try {
+      const result = evaluate(value);
+      setValue(result.toString());
+    } catch (error) {
+      setValue("Error");
+    }
   };
 
   return (
