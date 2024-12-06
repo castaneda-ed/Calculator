@@ -64,6 +64,10 @@
   background-color: #adadad;
 }
 
+.calculator-buttons {
+  padding-top: 1rem;
+}
+
 .display {
   height: 55px;
   background-color: rgb(54, 50, 50);
@@ -79,4 +83,12 @@
   font-size: 20px;
   letter-spacing: 2.5px;
   padding-right: 5px;
+}
+
+.intermediate-display {
+  font-size: 0.8rem;
+  color: gray;
+  text-align: right;
+
+  margin: -30px 10px 5px auto;
 }

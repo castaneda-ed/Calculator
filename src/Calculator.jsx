@@ -3,8 +3,10 @@ import { evaluate } from "mathjs";
 
 export default function Calculator() {
   const [value, setValue] = useState("");
+  const [intermediateResult, setIntermediateResult] = useState("");
 
   const handleKey = (e) => {
+    e.preventDefault();
     if (
       !/[\d\+\-\*\/\.\%\(\)]/.test(e.key) &&
       e.key !== "Backspace" &&
@@ -13,36 +15,55 @@ export default function Calculator() {
     ) {
       e.preventDefault();
       return;
-    } else if (
-      (value === "" ||
-        ["+", "-", "*", "/", ".", "%"].includes(value.slice(-1))) &&
-      e.key === "Enter"
-    ) {
-      return;
-    } else if (value === "" && ["+", "-", "*", "/", ".", "%"].includes(e.key)) {
+    }
+    if (value === "" && ["+", "*", "/", "%"].includes(e.key)) {
       e.preventDefault();
       return;
-    } else if (e.key === "Enter") {
+    }
+    if (e.key === "Enter") {
       e.preventDefault();
       calculateResult();
-    } else if (["+", "-", "*", "/", "%", "."].includes(e.key)) {
+      setIntermediateResult("");
+      return;
+    }
+    if (["+", "-", "*", "/", "%", "."].includes(e.key)) {
       e.preventDefault();
       if (!value.endsWith(e.key)) {
-        setValue((prev) => prev + e.key);
+        const updatedValue = value + e.key;
+        setValue(updatedValue);
+        calculateIntermediateResult(updatedValue);
       }
-    } else if (e.key === "Backspace") {
+      return;
+    }
+
+    if (e.key === "Backspace") {
       e.preventDefault();
-      setValue((prev) => prev.slice(0, -1));
-    } else if (e.key === "Escape") {
+      const updatedValue = value.slice(0, -1);
+      setValue(updatedValue);
+      calculateIntermediateResult(updatedValue);
+      return;
+    }
+
+    if (e.key === "Escape") {
       setValue("");
-    } else if (e.key === "." && !value.includes(".")) {
+      setIntermediateResult("");
+      return;
+    }
+
+    if (e.key === "." && !value.includes(".")) {
       setValue((prev) => prev + e.key);
     }
+
+    const updatedValue = value + e.key;
+
+    setValue(updatedValue);
+    calculateIntermediateResult(updatedValue);
+    return;
   };
 
   // Check if the operator is valid (not consecutive)
   const isValidOperator = (operator) => {
-    const lastChar = value.slice(-1);
+    const lastChar = value.toString().slice(-1);
     if (["+", "-", "*", "/", "%"].includes(lastChar)) {
       return false;
     }
@@ -60,25 +81,58 @@ export default function Calculator() {
   const handleCalculatorClick = (e) => {
     const input = e.target.value;
 
-    if (["+", "-", "*", "/", "%"].includes(input)) {
-      if (value === "" || !isValidOperator(input)) {
-        return;
-      }
+    if (input === "CA") {
+      setValue("");
+      setIntermediateResult("");
+      return;
+    }
+
+    if (input === "DE") {
+      const updatedValue = value.toString().slice(0, -1);
+      setValue(updatedValue);
+      calculateIntermediateResult(updatedValue);
+      return;
+    }
+
+    if (
+      ["+", "*", "/", "%"].includes(input) &&
+      (value === "" || !isValidOperator(input))
+    ) {
+      return;
     }
 
     if (input === "." && !isValidDecimal()) {
       return;
     }
 
-    setValue((prev) => prev + input);
+    const updatedValue = value.toString() + input;
+    setValue(updatedValue);
+    calculateIntermediateResult(updatedValue);
   };
 
   const calculateResult = () => {
     try {
       const result = evaluate(value);
-      setValue(result.toString());
+      setValue(parseFloat(result.toFixed(10).toString()));
+      setIntermediateResult("");
     } catch (error) {
       setValue("Error");
+    }
+  };
+
+  const calculateIntermediateResult = (expression) => {
+    try {
+      if (
+        expression &&
+        !["+", "-", "*", "/", "%", "."].includes(expression.slice(-1))
+      ) {
+        const result = evaluate(expression);
+        setIntermediateResult(parseFloat(result.toFixed(10).toString()));
+      } else {
+        setIntermediateResult("");
+      }
+    } catch {
+      setIntermediateResult("");
     }
   };
 
@@ -95,18 +149,28 @@ export default function Calculator() {
               onKeyDown={handleKey}
             />
           </label>
-          <div>
+          <div className="intermediate-display">
+            <p>{intermediateResult || "..."}</p>
+          </div>
+          <div className="calculator-buttons">
             <input
               type="button"
               value="CA"
               className="deleting"
-              onClick={(e) => setValue("")}
+              onClick={(e) => {
+                setValue("");
+                setIntermediateResult("");
+              }}
             />
             <input
               type="button"
               value="DE"
               className="deleting"
-              onClick={(e) => setValue(value.slice(0, -1))}
+              onClick={(e) => {
+                const updatedValue = value.slice(0, -1);
+                setValue(updatedValue);
+                calculateIntermediateResult(updatedValue);
+              }}
             />
             <input
               type="button"
