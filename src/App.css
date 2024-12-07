@@ -58,10 +58,6 @@ main {
   background-color: #797979;
 }
 
-.last-row:last-child {
-  justify-self: flex-end;
-}
-
 .operator {
   background-color: #ff9500;
 }
