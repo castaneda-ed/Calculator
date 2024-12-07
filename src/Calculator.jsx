@@ -138,8 +138,8 @@ export default function Calculator() {
 
   return (
     <>
-      <h1>Simple Calculator</h1>
       <main className="container ">
+        <h1>Simple Calculator</h1>
         <div className="calculator">
           <form onSubmit={(e) => e.preventDefault()}>
             <label>
