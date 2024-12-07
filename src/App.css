@@ -26,6 +26,13 @@ main {
   justify-content: center;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
 .calculator {
   max-height: 500px;
   display: flex;
