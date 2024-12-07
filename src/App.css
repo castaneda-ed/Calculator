@@ -27,6 +27,7 @@ main {
 }
 
 .calculator {
+  max-height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,4 +102,52 @@ main {
   text-align: right;
 
   margin: -30px 10px 5px auto;
+}
+
+@media screen and (max-width: 296px) {
+  .container {
+    width: 90%;
+    justify-self: center;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .numbers,
+  .deleting,
+  .operator {
+    width: 45px;
+    height: 45px;
+    font-size: 13px;
+  }
+
+  .display {
+    height: 42px;
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 264px) {
+  .container {
+    width: 90%;
+    justify-self: center;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .numbers,
+  .deleting,
+  .operator {
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .display {
+    height: 40px;
+    font-size: 13px;
+  }
 }
